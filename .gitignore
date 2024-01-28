@@ -48,3 +48,10 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+terraform/.terraform
+terraform/packages.zip
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
