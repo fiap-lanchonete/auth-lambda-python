@@ -3,7 +3,7 @@ name: Terraform Deployment Lambda
 on:
   push:
     branches:
-      - main  # Substitua pela branch que deseja acionar
+      - main  
 
 jobs:
   terraform:
@@ -21,7 +21,8 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
+        aws-region: ${{ secrets.AWS_REGION }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -38,5 +39,5 @@ jobs:
       run: terraform apply -auto-approve
       env:
         TF_VAR_region: us-east-2
-        TF_VAR_source_code_path: ../code/auth/
+        TF_VAR_source_code_path: ../code
 
