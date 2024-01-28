@@ -1,7 +1,7 @@
 variable "filename" {
   description = "Name of the zip file"
   type = string
-  default = "nametest.zip"
+  default = "packages.zip"
 }
 
 variable "source_code_path" {
