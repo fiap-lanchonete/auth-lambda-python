@@ -7,5 +7,5 @@ variable "region" {
 variable "source_code_path" {
   description = "Path for the Lambda source code"
   type = string
-  default = "../code/"
+  default = "../code"
 }
