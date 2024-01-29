@@ -39,13 +39,12 @@ resource "aws_apigatewayv2_integration" "auth_lambda" {
 
   integration_uri    = var.lambda_function_arn
   integration_type   = "AWS_PROXY"
-  integration_method = "POST"
+  integration_method = "ANY"
 }
 
-resource "aws_apigatewayv2_route" "get_auth" {
-  api_id = aws_apigatewayv2_api.auth_lambda.id
-
-  route_key = "GET /auth"
+resource "aws_apigatewayv2_route" "proxy" {
+  api_id    = aws_apigatewayv2_api.auth_lambda.id
+  route_key = "ANY /{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.auth_lambda.id}"
 }
 

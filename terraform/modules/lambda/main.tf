@@ -49,6 +49,6 @@ resource "aws_lambda_permission" "logs_lambda_permission" {
 
 data "archive_file" "python_lambda_package" {
   type = "zip"
-  source_file = var.source_code_path
+  source_dir = var.source_code_path
   output_path = var.filename
 }
