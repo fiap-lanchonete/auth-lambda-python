@@ -4,11 +4,12 @@ from datetime import datetime
 from jwt import encode
 from functools import wraps
 import awsgi
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://user:password@localhost:5432/db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'sua_chave_secreta'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI', 'postgresql://user:password@localhost:5432/db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS', False)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'sua_chave_secreta')
 
 db = SQLAlchemy(app)
 
