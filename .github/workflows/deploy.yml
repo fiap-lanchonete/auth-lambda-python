@@ -1,0 +1,60 @@
+name: Kubernetes Deployment
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  kubernetes:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        run: docker login -u gfrancodev -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build . -t gfrancodev/lambda-auth:latest
+          docker push gfrancodev/lambda-auth:latest
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.AWS_REGION }}
+
+      - name: Install kubectl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y kubectl
+
+      - name: Create ConfigMap
+        run: |
+          cat <<EOF >>./kubernetes/configmap.yaml
+          apiVersion: v1
+          kind: Secret
+          metadata:
+          name: lambda-auth-env
+          type: Opaque
+          data:
+            DATABASE_URL: ${{ secrets.MONGO_URI }}
+            MERCADOPAGO_ACCESS_TOKEN: ${{ secrets.MERCADOPAGO_ACCESS_TOKEN }}
+          EOF
+
+      - name: Deploy to Kubernetes
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.KUBERNETES_CLUSTER_NAME }}
+          echo "$KUBE_CONFIG_DATA" | base64 -d > kubeconfig.yaml
+          kubectl apply -f kubernetes/

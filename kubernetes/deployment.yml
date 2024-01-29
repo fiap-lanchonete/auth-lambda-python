@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lambda-auth
+spec:
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: lambda-auth
+  template:
+    metadata:
+      labels:
+        app: lambda-auth
+    spec:
+      containers:
+        - name: lambda-auth
+          image: gfrancodev/lanchonete-producao:lambda-auth
+          ports:
+            - containerPort: 80  
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: lambda-auth-env
+                  key: DATABASE_URL
+            - name: MERCADOPAGO_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: lambda-auth-env
+                  key: MERCADOPAGO_ACCESS_TOKEN
