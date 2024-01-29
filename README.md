@@ -1,0 +1,1 @@
+[![Kubernetes Deployment](https://github.com/fiap-lanchonete/auth-lambda-python/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/fiap-lanchonete/auth-lambda-python/actions/workflows/deploy.yml)
