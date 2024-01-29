@@ -40,21 +40,21 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y kubectl
 
-      - name: Create ConfigMap
+      - name: Create Secrets
         run: |
-          cat <<EOF >>./kubernetes/configmap.yaml
+          cat <<EOF >>./kubernetes/secret.yml
           apiVersion: v1
           kind: Secret
           metadata:
             name: lambda-auth-env
-            type: Opaque
+          type: Opaque
           data:
-            DATABASE_URL: ${{ secrets.MONGO_URI }}
+            DATABASE_URL: ${{ secrets.MONGO_URI | b64enc | quote }}
             MERCADOPAGO_ACCESS_TOKEN: ${{ secrets.MERCADOPAGO_ACCESS_TOKEN }}
           EOF
 
       - name: Deploy to Kubernetes
         run: |
-          aws eks update-kubeconfig --name ${{ secrets.KUBERNETES_CLUSTER_NAME }}
+          aws eks update-kubeconfig --name ${{ secrets.KUBERNETES_CLUSTER_NAME | b64enc | quote }}
           echo "$KUBE_CONFIG_DATA" | base64 -d > kubeconfig.yaml
           kubectl apply -f kubernetes/
