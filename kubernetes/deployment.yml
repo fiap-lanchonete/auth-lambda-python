@@ -14,17 +14,17 @@ spec:
     spec:
       containers:
         - name: lambda-auth
-          image: gfrancodev/lanchonete-producao:lambda-auth
+          image: gfrancodev/lambda-auth
           ports:
             - containerPort: 80  
           env:
-            - name: DATABASE_URL
+            - name: SQLALCHEMY_DATABASE_URI
               valueFrom:
                 secretKeyRef:
                   name: lambda-auth-env
-                  key: DATABASE_URL
-            - name: MERCADOPAGO_ACCESS_TOKEN
+                  key: SQLALCHEMY_DATABASE_URI
+            - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: lambda-auth-env
-                  key: MERCADOPAGO_ACCESS_TOKEN
+                  key: SECRET_KEY
