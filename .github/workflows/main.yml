@@ -38,4 +38,4 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve
         env:
-          TF_VAR_source_code_path: ./code
+          TF_VAR_source_code_path: ../code
