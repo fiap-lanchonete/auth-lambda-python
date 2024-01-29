@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from jwt import encode
 from functools import wraps
-import awsgi
 import os
 
 app = Flask(__name__)
